@@ -1,0 +1,27 @@
+{% extends 'intro.html' %}
+
+{% block tituloPagina %}
+    Redirigiendo...
+{% endblock %}
+
+{% block contenido %}
+<div class="container text-center mt-5">
+    <h2>Descubriendo con los datos importados.</h2>
+    <p class="lead">Por favor espera mientras se realiza el proceso de optimización del descubrimiento.</p>
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+    </div>
+    <form id="post_form" action="{% url 'discovery' %}" method="post">
+        {% csrf_token %}
+        {% for key, value in post_data.items %}
+            <input type="hidden" name="{{ key }}" value="{{ value }}">
+        {% endfor %}
+    </form>
+</div>
+
+<script type="text/javascript">
+    window.onload = function() {
+        document.getElementById('post_form').submit();
+    };
+</script>
+{% endblock %}

@@ -1,0 +1,182 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block contenido %}
+<div class="container mt-5">
+    <link rel="stylesheet" href="{% static 'css/style-manual.css' %}">
+    <h1 class="text-center">Información</h1>
+
+    <h2 class="mt-5 text-center"> Descubrimiento de procesos</h2>
+    <p>
+        La sección de <strong>Descubrimiento</strong> es probablemente la primera con la que interactúe todo usario, a través de la misma
+        el usuario puede realizar el proceso de descubrimiento mediante el formulario pertinente, sus campos son:
+    </p>
+
+    <table class="table table-bordered mt-3">
+        <thead>
+            <tr>
+                <th>Campo</th>
+                <th>Descripción</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Nombre</td>
+                <td>El nombre que se desee dar a la ejecución a realizar</td>
+            </tr>
+            <tr>
+                <td>Método de Optimización</td>
+                <td>Aquí se selecciona el método de optimización que se utilizará. Las opciones disponibles son los algoritmos evolutivos NSGAII, NSGAIII y SPEA2.</td>
+            </tr>
+            <tr>
+                <td>Tipo de Minero</td>
+                <td>Aquí se indicará el algoritmo de descubrimiento de procesos que se desea utilizar. Las opciones disponibles son los mineros heurístico e inductivo</td>
+            </tr>
+            <tr>
+                <td>Log de Eventos</td>
+                <td>El log que contiene la información de los eventos con los que realizar el proceso de descubrimiento. Se listarán los que el usuario haya 
+                    subido a la aplicación.
+                </td>
+            </tr>
+            <tr>
+                <td>Métricas de Evaluación</td>
+                <td>Este campo permite al usuario seleccionar las métricas que se utilizarán para evaluar los resultados del proceso de descubrimiento. 
+                    Ahora mismo se cuenta con dos métricas implementadas, sin embargo se recomienda usar las básicas.
+                </td>
+            </tr>
+            <tr>
+                <td>hiperparámetros</td>
+                <td>Cada algoritmo de optimización tiene sus propios hiperparámetros. Al escoger un optimizador se abrirá un desplegable donde se podrán
+                    especificar los valores deseados, que variarán según el optimizador seleccionado.
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3 class="mt-5 text-center">Métricas de Evaluación</h2>
+    <p>
+        Especifican cómo se evaluaran los modelos descubiertos, es decir se utilizarán a lo largo del proceso de optimización para que el algoritmo refine los
+        resultados. Todas las métricas están ajustadas a <strong>minimizar</strong>, y más abajo se detallan las métricas implementadas
+    </p>
+
+    <p>
+        Todos los modelos descubiertos son redes de petri, se puede ver una imagen de ejemplo justo abajo, también se puede consultar información sobre ellas 
+        en <a href="http://petrinet.org/">esta página</a>
+    </p>
+
+    <img src="{% static 'petri-ejemplo.png' %}" alt="Ejemplo de Red de Petri" class="petri-ejemplo img-fluid mx-auto d-block mt-4">
+
+
+    <h4>Métricas Básicas</h3>
+    <table class="table table-bordered mt-3">
+        <thead>
+            <tr>
+                <th>Métrica</th>
+                <th>Descripción</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>n places</td>
+                <td>Nº de lugares (círculos en la red de Petri) representados.</td>
+            </tr>
+            <tr>
+                <td>n transitions</td>
+                <td>Nº de transiciones (rectángulos en la red de Petri) representados.</td>
+            </tr>
+            <tr>
+                <td>n arcs</td>
+                <td>Nº de arcos conectando lugares con transiciones.</td>
+            </tr>
+            <tr>
+                <td>cycl complx</td>
+                <td>La complejidad ciclomática mide la cantidad de caminos independientes de una red, inspirada en el concepto de grafos de control de flujo en la teoría de la complejidad del software.</td>
+            </tr>
+            <tr>
+                <td>ratio</td>
+                <td>Ratio de lugares/transiciones.</td>
+            </tr>
+            <tr>
+                <td>joins</td>
+                <td>Un join se da cuando varios lugares se conectan a una transición; tomará en cuenta cuántas veces ocurre.</td>
+            </tr>
+            <tr>
+                <td>splits</td>
+                <td>Un split se da cuando una transición se conecta a varios lugares; tomará en cuenta cuántas veces ocurre.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>
+        Las métricas de usabilidad varían un poco respecto a las anteriores, para empezar, las soluciones verdaderamente se evalúan exactamente igual que las 
+        de las métricas básicas, lo que hacen las métricas extra de usabilidad es aplicar 'reglas' o restricciones a cómo son los modelos. Si no se cumple alguna
+        de la reglas, el modelo es considerado no útil y es penalizado en sus métricas.
+    </p>
+ 
+    
+    <h4>Métricas de Usabilidad</h3>
+    <table class="table table-bordered mt-3">
+        <thead>
+            <tr>
+                <th>Métrica</th>
+                <th>Descripción</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>IS AP</td>
+                <td>Si el grafo es aperiódico o no.</td>
+            </tr>
+            <tr>
+                <td>NSFE</td>
+                <td>Nº total de flujos salientes de eventos.</td>
+            </tr>
+            <tr>
+                <td>GM</td>
+                <td>Diferencia entre flujos entrantes y salientes.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2 class="mt-5 text-center">Soluciones</h2>
+    <ul>
+        <li>
+            Al final del proceso de descubrimiento se mostrará una tabla con la mayoría de los detalles de la ejecución. Al pulsar el botón <strong>'Explorar Soluciones'</strong>, se abrirá una página nueva con todas las soluciones del optimizador.
+        </li>
+        <li>
+            El número de soluciones depende de la población de individuos establecida en el optimizador. Por ejemplo, si se establece en 100, habrá 100 individuos (soluciones) al final del proceso, las cuales habrán evolucionado en algo útil.
+        </li>
+        <li>
+            De las soluciones se mostrarán sus <strong>Variables</strong> y <strong>Objetivos</strong>:
+            <ul>
+                <li><strong>Variables:</strong> Los hiperparámetros apropiados para el minero descubierto, que han sido utilizados para obtener la solución evaluada.</li>
+                <li><strong>Objetivos:</strong> Los valores de las métricas de evaluación. En el caso de usar las métricas <strong>básicas</strong>, serán 7 campos con los valores que haya obtenido la solución.</li>
+            </ul>
+        </li>
+        <li>
+            En cada solución individual se muestra una imagen con la red de Petri del proceso descubierto, que es el resultado de ejecutar el algoritmo de minería especificado con los hiperparámetros que aporta la solución (sus variables).
+        </li>
+    </ul>
+    
+
+
+    <h2 class="mt-5 text-center">Frente de pareto.</h2>
+    <p>
+        Aunque tendremos tantas soluciones como población de individos, sólo unas cuantas serán las <strong>mejores</strong>. Desde el punto de vista
+        matemático (de las métricas) las mejores soluciones son las <strong>soluciones no dominadas</strong>.
+    </p>
+
+    <p>
+        En el campo de la optimización multiobjetivo na solución se dice que domina a otra cuando es mejor en al menos un objetivo siendo como 
+        mínimo igual o mejor en el resto. Es decir, que las mejores son aquellas a las que esto no les ocurre. El conjunto de estas soluciones se
+        denomina <strong>Frente de Pareto.</strong>
+    </p>
+
+    <p>
+        Además de filtrar las soluciones por las que son de Pareto, se mostrará un gráfico como el de abajo detallando la magnitud de cada objetivo
+        en las soluciones que lo conforman, donde se podrá apreciar de mejor o peor forma la no dominancia entre ellas.
+    </p>
+
+    <img src="{% static 'pareto-ejemplo.png' %}" alt="Ejemplo de gráfico de Pareto" class="pareto-ejemplo img-fluid mx-auto d-block mt-4">
+
+</div>
+{% endblock %}

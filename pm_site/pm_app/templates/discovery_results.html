@@ -1,0 +1,81 @@
+{% extends 'main.html' %}
+{% load custom_filters %}
+{% load static %}
+
+{% block tituloPagina %}Resultados del Descubrimiento{% endblock %}
+
+{% block contenido %}
+<link rel="stylesheet" href="{% static 'css/style-discovery_results.css' %}">
+<div class="form-container">
+    <h2>Resultados del Proceso de Descubrimiento</h2>
+    
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <td><strong>Nombre de la Ejecución:</strong></td>
+                <td>{{ execution_name }}</td>
+            </tr>
+            <tr>
+                <td><strong>Log de Eventos Utilizado:</strong></td>
+                <td>{{ events_log }}</td>
+            </tr>
+            <tr>
+                <td><strong>Minero Utilizado:</strong></td>
+                <td>{{ miner_type }}</td>
+            </tr>
+            <tr>
+                <td><strong>Métricas Utilizadas:</strong></td>
+                <td>{{ evaluation_metrics }}</td>
+            </tr>
+            <tr>
+                <td><strong>Tiempo de Ejecución:</strong></td>
+                <td>{{ runtime|format_duration }}</td>
+            </tr>
+            <tr>
+                <td><strong>Optimizador Utilizado:</strong></td>
+                <td>{{ optimization_method }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h4>Hiperparámetros del Optimizador:</h4>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Parámetro</th>
+                <th>Valor</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for key, value in optimization_hipparams.items %}
+            <tr>
+                <td><strong>{{ key|capfirst }}</strong></td>
+                <td>
+                    {% if value|length == 2 and value.1.items %}
+                        <p><strong>{{ value.0 }}</strong></p> 
+                        <table class="table table-sm table-bordered mb-0">
+                            <tbody>
+                                {% for sub_key, sub_value in value.1.items %}
+                                <tr>
+                                    <td>{{ sub_key }}</td>
+                                    <td>{{ sub_value }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        {{ value }}
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="mt-4 text-center bnts">
+        <a href="{% url 'discovery' %}" class="btn btn-primary">Descubrimiento</a>
+        <a href="{% url 'solutions' execution_id %}" class="btn btn-primary">Explorar Soluciones </a>
+        <a href="{% url 'get_execution_data' execution_id %}" class="btn btn-primary">Descargar Datos</a>
+    </div>
+</div>
+{% endblock %}

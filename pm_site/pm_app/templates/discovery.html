@@ -1,0 +1,76 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block tituloPagina %}Discovery - Optimización de Hiperparámetros{% endblock %}
+
+{% block contenido %}
+<link rel="stylesheet" href="{% static 'css/style-discovery.css' %}">
+<div class="container mt-5">
+    <div class="form-container"> 
+        <h2 class="text-center">Descubrimiento</h2>
+        <form method="post" enctype="multipart/form-data" id="discovery-form">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="id_execution_name" class="form-label">Nombre de la Ejecución</label>
+                {{ form.execution_name }}
+            </div>
+
+            <div class="mb-3">
+                <label for="id_event_log" class="form-label">Selecciona Log de Eventos</label>
+                <select name="event_log" id="id_event_log" class="form-select">
+                    {% for log_file in log_files %}
+                        <option value="{{ log_file }}">{{ log_file }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="id_miner_type" class="form-label">Tipo de Minero</label>
+                {{ form.miner_type }}
+            </div>
+
+            <div class="mb-3">
+                <label for="id_evaluation_metrics" class="form-label">Métricas de Evaluación</label>
+                {{ form.evaluation_metrics }}
+            </div>
+
+            <div class="mb-3">
+                <label for="id_optimization_method" class="form-label">Método de Optimización</label>
+                {{ form.optimization_method }}
+            </div>
+
+            <div id="hyperparameters-container" class="mb-3">
+                <h4>Hiperparámetros</h4>
+                <div id="dynamic-fields"></div> <!-- manejado en js segun el optim -->
+            </div>
+
+            <button type="submit" id="submit-button" class="btn btn-primary">Optimizar</button>
+        </form>
+
+        <!-- spinner-->
+        <div id="spinner-container" class="mt-3" style="display: none; text-align: center;">
+            <h2>Descubriendo con los datos especificados.</h2>
+            <div class="spinner-border spinner-border-lg text-primary" role="status">
+                <span class="visually-hidden">Cargando...</span>
+            </div>
+            <p class="lead">Por favor espera mientras se realiza el proceso de descubrimiento.</p>
+        </div>
+    </div>
+
+
+
+    <!-- Para manejar los hiperparámetros que se muestran.-->
+    <script src="{% static 'js/discovery.js' %}"></script>
+
+    <!-- Animación de carga para que se vea que esto hace cosas-->
+    <script>
+        document.getElementById('discovery-form').addEventListener('submit', function(event) {
+            event.preventDefault(); 
+            document.getElementById('discovery-form').style.display = 'none';  
+            document.getElementById('spinner-container').style.display = 'block'; 
+            this.submit();
+        });
+    </script>
+</div>
+
+{% endblock %}
